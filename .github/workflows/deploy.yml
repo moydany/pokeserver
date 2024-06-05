@@ -7,19 +7,8 @@ on:
       - develop
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
-
-    services:
-      mongo:
-        image: mongo:latest
-        ports:
-          - 27017:27017
-        options: >-
-          --health-cmd "mongosh --eval 'db.adminCommand(\"ping\")'" 
-          --health-interval 10s 
-          --health-timeout 5s 
-          --health-retries 5
 
     steps:
     - name: Checkout repository
@@ -28,7 +17,7 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '18'
+        node-version: '20'
 
     - name: Install dependencies
       run: npm install
@@ -37,9 +26,6 @@ jobs:
       env:
         MONGO_URI: mongodb://localhost:27017/testDB
       run: npm test
-
-    - name: Build project
-      run: npm run build
 
     - name: Add SSH key
       uses: webfactory/ssh-agent@v0.5.3
@@ -53,8 +39,10 @@ jobs:
         LIGHTSAIL_IP: ${{ secrets.LIGHTSAIL_IP }}
       run: |
         ssh -o StrictHostKeyChecking=no $LIGHTSAIL_SSH_USER@$LIGHTSAIL_IP << 'EOF'
-        docker pull moydanh/pokeserver:latest
-        docker stop pokeserver || true
-        docker rm pokeserver || true
-        docker run -d --platform linux/amd64 --name pokeserver -p 80:8080 -e MONGO_URI=$MONGO_URI moydanh/pokeserver:latest
+        cd /home/ubuntu/pokeserver || git clone https://github.com/moydany/pokeserver.git /home/ubuntu/pokeserver && cd /home/ubuntu/pokeserver
+        git pull origin main || exit 1
+        echo "MONGO_URI=$MONGO_URI" > .env
+        docker-compose down || true
+        docker-compose build --no-cache || exit 1
+        docker-compose up -d || exit 1
         EOF
