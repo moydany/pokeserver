@@ -3,6 +3,7 @@ import express from 'express';
 import { connectDatabase } from './config/database';
 import authRoutes from './routes/authRoutes';
 import pokemonRoutes from './routes/pokemonRoutes';
+import healthRoutes from './routes/healthRoutes';
 import dotenv from 'dotenv';
 
 const envFile = `.env.${process.env.NODE_ENV || 'development'}`;
@@ -22,6 +23,7 @@ connectDatabase()
 
 app.use('/api/auth', authRoutes);
 app.use('/api/pokemon', pokemonRoutes);
+app.use('/', healthRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
