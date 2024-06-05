@@ -56,5 +56,5 @@ jobs:
         docker pull moydanh/pokeserver:latest
         docker stop pokeserver || true
         docker rm pokeserver || true
-        docker run -d --name pokeserver -p 80:8080 -e MONGO_URI=$MONGO_URI moydanh/pokeserver:latest
+        docker run -d --platform linux/amd64 --name pokeserver -p 80:8080 -e MONGO_URI=$MONGO_URI moydanh/pokeserver:latest
         EOF
