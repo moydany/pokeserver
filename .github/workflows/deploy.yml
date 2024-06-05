@@ -53,8 +53,8 @@ jobs:
         LIGHTSAIL_IP: ${{ secrets.LIGHTSAIL_IP }}
       run: |
         ssh -o StrictHostKeyChecking=no $LIGHTSAIL_SSH_USER@$LIGHTSAIL_IP << 'EOF'
-        docker pull yourdockerhubusername/pokeserver:latest
+        docker pull moydanh/pokeserver:latest
         docker stop pokeserver || true
         docker rm pokeserver || true
-        docker run -d --name pokeserver -p 80:8080 -e MONGO_URI=$MONGO_URI yourdockerhubusername/pokeserver:latest
+        docker run -d --name pokeserver -p 80:8080 -e MONGO_URI=$MONGO_URI moydanh/pokeserver:latest
         EOF
