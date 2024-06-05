@@ -1,0 +1,42 @@
+name: CI/CD for Pokeserver
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '18'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run tests
+      run: npm test
+
+    - name: Build project
+      run: npm run build
+
+    - name: Deploy to Lightsail
+      env:
+        MONGO_URI: ${{ secrets.MONGO_URI }}
+        LIGHTSAIL_SSH_USER: ${{ secrets.LIGHTSAIL_SSH_USER }}
+        LIGHTSAIL_IP: ${{ secrets.LIGHTSAIL_IP }}
+      run: |
+        ssh -o StrictHostKeyChecking=no $LIGHTSAIL_SSH_USER@$LIGHTSAIL_IP << 'EOF'
+        docker pull yourdockerhubusername/pokeserver:latest
+        docker stop pokeserver || true
+        docker rm pokeserver || true
+        docker run -d --name pokeserver -p 80:8080 -e MONGO_URI=$MONGO_URI yourdockerhubusername/pokeserver:latest
+        EOF
