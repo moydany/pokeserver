@@ -8,7 +8,12 @@ const authService = container.get<AuthService>(AuthService);
 export const signup = async (req: Request, res: Response) => {
   const { email, password, name, lastname } = req.body;
   try {
-    const user: IUser = await authService.signup({ email, password, name, lastname } as IUser);
+    const user: IUser = await authService.signup({
+      email,
+      password,
+      name,
+      lastname,
+    } as IUser);
     res.status(201).send({ message: 'User created successfully', user });
   } catch (error) {
     console.error('Error creating user:', error);
