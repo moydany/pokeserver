@@ -1,6 +1,7 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IUser extends Document {
+  _id: mongoose.Types.ObjectId; // Asegúrate de que _id está tipado correctamente
   email: string;
   password: string;
   name: string;
