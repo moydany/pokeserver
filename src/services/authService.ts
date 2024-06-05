@@ -12,7 +12,10 @@ export class AuthService {
 
   async signup(userData: IUser): Promise<IUser> {
     const hashedPassword = await argon2.hash(userData.password);
-    const user = await this.userRepository.create({ ...userData, password: hashedPassword });
+    const user = await this.userRepository.create({
+      ...userData,
+      password: hashedPassword,
+    });
     return user.save();
   }
 
@@ -23,7 +26,16 @@ export class AuthService {
     const isMatch = await argon2.verify(user.password, password);
     if (!isMatch) return null;
 
-    const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign(
+      {
+        _id: user._id.toString(),
+        email: user.email,
+        name: user.name,
+        lastname: user.lastname,
+      },
+      JWT_SECRET,
+      { expiresIn: '1h' },
+    );
     return token;
   }
 }
