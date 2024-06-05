@@ -41,6 +41,11 @@ jobs:
     - name: Build project
       run: npm run build
 
+    - name: Add SSH key
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.LIGHTSAIL_SSH_PRIVATE_KEY }}
+
     - name: Deploy to Lightsail
       env:
         MONGO_URI: ${{ secrets.MONGO_URI }}
@@ -48,4 +53,8 @@ jobs:
         LIGHTSAIL_IP: ${{ secrets.LIGHTSAIL_IP }}
       run: |
         ssh -o StrictHostKeyChecking=no $LIGHTSAIL_SSH_USER@$LIGHTSAIL_IP << 'EOF'
-       
+        docker pull yourdockerhubusername/pokeserver:latest
+        docker stop pokeserver || true
+        docker rm pokeserver || true
+        docker run -d --name pokeserver -p 80:8080 -e MONGO_URI=$MONGO_URI yourdockerhubusername/pokeserver:latest
+        EOF
