@@ -7,11 +7,10 @@ import pokemonRoutes from './routes/pokemonRoutes';
 import healthRoutes from './routes/healthRoutes';
 import dotenv from 'dotenv';
 
-const envFile = `.env.${process.env.NODE_ENV || 'development'}`;
-dotenv.config({ path: envFile });
+dotenv.config();
 
 const app = express();
-const port = parseInt(process.env.PORT as string) || 8080;
+const port = process.env.PORT ? Number(process.env.PORT) : 8080;
 
 app.use(express.json());
 
