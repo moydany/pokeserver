@@ -1,34 +1,25 @@
-version: '3.8'
+version: "3.8"
+
 services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - "8080:8080"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/pokeDB
+    command: npm run dev
+
   mongo:
     image: mongo
-    container_name: mongo
     ports:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
-    networks:
-      - pokeserver-network
-
-  app:
-    build: .
-    container_name: pokeserver
-    ports:
-      - "8080:8080"
-    depends_on:
-      - mongo
-    volumes:
-      - .:/app
-      - /app/node_modules
-    networks:
-      - pokeserver-network
-    environment:
-      - MONGO_URI=mongodb://mongo:27017/pokeDB
-      - NODE_ENV=development
-    command: npm run dev:docker
 
 volumes:
   mongo-data:
-
-networks:
-  pokeserver-network:

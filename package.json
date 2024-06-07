@@ -4,12 +4,10 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "dev": "docker compose -f docker-compose.yml up",
-    "dev:docker": "nodemon --legacy-watch src/app.ts",
-    "prod": "docker compose -f docker-compose.prod.yml up",
+    "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/app.ts",
+    "start": "node dist/app.js",
     "test": "jest",
-    "prepare": "husky install",
-    "start": "NODE_ENV=production node dist/app.js"
+    "prepare": "husky install"
   },
   "dependencies": {
     "argon2": "^0.40.3",
@@ -22,7 +20,8 @@
     "mongoose": "^8.4.1",
     "reflect-metadata": "^0.2.2",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1"
+    "swagger-ui-express": "^5.0.1",
+    "winston": "^3.13.0"
   },
   "devDependencies": {
     "@types/argon2": "^0.15.0",

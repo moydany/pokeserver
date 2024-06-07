@@ -1,13 +1,13 @@
 version: '3.8'
+
 services:
   app:
-    build: .
-    container_name: pokeserver
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
     environment:
-      - MONGO_URI=${MONGO_URI}
       - NODE_ENV=production
-    volumes:
-      - .:/app
-    command: npm run start
+      - MONGO_URI=${MONGO_URI}
+    command: ["npm", "run", "start"]
