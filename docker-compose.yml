@@ -19,6 +19,7 @@ services:
       - mongo
     volumes:
       - .:/app
+      - /app/node_modules
     networks:
       - pokeserver-network
     environment:
