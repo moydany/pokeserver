@@ -180,3 +180,40 @@ Para configurar la conexión a la base de datos remota de MongoDB en producción
 3. Guarda el archivo `.env` en el directorio raíz del proyecto.
 
 La aplicación utilizará esta configuración para conectarse a la base de datos MongoDB en el entorno de producción.
+
+## Ver los Logs de Winston
+
+La aplicación utiliza Winston para la gestión de logs. Los logs se almacenan en archivos dentro del directorio `logs`.
+
+### Archivos de Log
+
+- `logs/combined.log`: Contiene todos los logs generados por la aplicación.
+- `logs/error.log`: Contiene únicamente los logs de errores.
+
+### Ver los Logs
+
+Para ver los logs, puedes abrir los archivos directamente o utilizar comandos de la terminal para ver su contenido:
+
+- Para ver el contenido completo del archivo de logs combinado:
+
+    ```sh
+    cat logs/combined.log
+    ```
+
+- Para ver el contenido completo del archivo de logs de errores:
+
+    ```sh
+    cat logs/error.log
+    ```
+
+- Para seguir los logs en tiempo real (combinado):
+
+    ```sh
+    tail -f logs/combined.log
+    ```
+
+- Para seguir los logs en tiempo real (errores):
+
+    ```sh
+    tail -f logs/error.log
+    ```
