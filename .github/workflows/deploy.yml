@@ -46,7 +46,7 @@ jobs:
       run: |
         ssh -o StrictHostKeyChecking=no $LIGHTSAIL_SSH_USER@$LIGHTSAIL_IP << 'EOF'
         cd /home/ubuntu/pokeserver || git clone https://github.com/moydany/pokeserver.git /home/ubuntu/pokeserver && cd /home/ubuntu/pokeserver
-        git pull origin main || exit 1
+        git pull origin develop || exit 1
         echo "MONGO_URI=$MONGO_URI" > .env
         npm install
         npm run build
