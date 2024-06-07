@@ -22,7 +22,7 @@ services:
     networks:
       - pokeserver-network
     environment:
-      - MONGO_URI=mongodb://mongo:27017/myDB
+      - MONGO_URI=mongodb://mongo:27017/pokeDB
       - NODE_ENV=development
     command: npm run dev:docker
 

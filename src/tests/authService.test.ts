@@ -11,7 +11,7 @@ describe('AuthService', () => {
   let userRepository: UserRepository;
 
   beforeAll(async () => {
-    await mongoose.connect('mongodb://localhost/testDB');
+    await mongoose.connect('mongodb://localhost/pokeDB');
 
     container = new Container();
     container.bind<UserRepository>(UserRepository).toSelf();

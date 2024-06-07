@@ -12,7 +12,7 @@ describe('PokemonService', () => {
   let pokemonRepository: PokemonRepository;
 
   beforeAll(async () => {
-    await mongoose.connect('mongodb://localhost/testDB');
+    await mongoose.connect('mongodb://localhost/pokeDB');
 
     container = new Container();
     container

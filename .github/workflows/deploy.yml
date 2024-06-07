@@ -24,7 +24,7 @@ jobs:
 
     - name: Run tests
       env:
-        MONGO_URI: mongodb://localhost:27017/testDB
+        MONGO_URI: mongodb://localhost:27017/pokeDB
       run: npm test
 
     - name: Add SSH key
