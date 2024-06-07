@@ -12,6 +12,9 @@ Bienvenido a Pokeserver! Este proyecto es una API para gestionar información so
 - [Pruebas](#pruebas)
 - [Pre-commit Hook](#pre-commit-hook)
 - [Documentación de la API](#documentación-de-la-api)
+- [Servidor en Producción](#servidor-en-producción)
+- [Colección de Postman](#colección-de-postman)
+- [Configuración de Variables de Entorno](#configuración-de-variables-de-entorno)
 
 ## Requisitos
 
@@ -53,6 +56,16 @@ La aplicación se puede ejecutar localmente o utilizando Docker.
 
     ```sh
     docker-compose up --build
+    ```
+
+La aplicación estará disponible en `http://localhost:8080`.
+
+### Usando Docker para Producción
+
+1. Construir y levantar los contenedores Docker para producción:
+
+    ```sh
+    docker-compose -f docker-compose.prod.yml up --build
     ```
 
 La aplicación estará disponible en `http://localhost:8080`.
@@ -124,3 +137,46 @@ El archivo `package.json` contiene la configuración de `lint-staged`:
 ## Documentación de la API
 
 La documentación de la API está disponible en Swagger. Para acceder a ella, navegar a `http://localhost:8080/api-docs` después de levantar la aplicación.
+
+## Servidor en Producción
+
+El servidor en producción está disponible en la siguiente URL:
+
+[https://pokeserver.orbitm.dev/](https://pokeserver.orbitm.dev/)
+
+## Colección de Postman
+
+Puedes utilizar una colección de Postman para probar la API. Sigue estas instrucciones:
+
+1. **Importar la Colección:**
+   - Abre Postman.
+   - Haz clic en el botón "Import" y selecciona el archivo `.json` de la colección.
+
+2. **Configurar Variables de Entorno:**
+   - Haz clic en la pestaña "Environments".
+   - Crea un nuevo entorno llamado "Pokeserver".
+   - Agrega las siguientes variables:
+     - `base_url`: `http://localhost:8080`
+     - `token`: Déjalo en blanco inicialmente.
+
+3. **Ejecutar las Solicitudes:**
+   - Utiliza la solicitud "Sign Up User" para crear un nuevo usuario.
+   - Utiliza la solicitud "Login User" para iniciar sesión con las credenciales del usuario creado. Esta solicitud configurará automáticamente la variable `token` para las solicitudes posteriores.
+   - Utiliza las demás solicitudes para interactuar con la API, como obtener, guardar y eliminar Pokémon.
+
+4. **Ejecutar Pruebas:**
+   - Cada solicitud tiene scripts de prueba para validar la respuesta. Consulta la pestaña "Tests" de cada solicitud para más detalles.
+
+## Configuración de Variables de Entorno
+
+Para configurar la conexión a la base de datos remota de MongoDB en producción, necesitas crear un archivo `.env` en el directorio raíz del proyecto. Puedes utilizar el archivo de muestra `.env.sample` como referencia:
+
+### Archivo `.env.sample`
+
+### Instrucciones:
+
+1. Copia el archivo `.env.sample` y renómbralo a `.env`.
+2. Rellena los valores de `<user>`, `<password>`, y `<host>` con tus credenciales de MongoDB y la dirección del host.
+3. Guarda el archivo `.env` en el directorio raíz del proyecto.
+
+La aplicación utilizará esta configuración para conectarse a la base de datos MongoDB en el entorno de producción.

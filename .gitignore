@@ -45,3 +45,5 @@ coverage/
 # Miscellaneous
 *.swp
 *.swo
+list_project_files.sh
+project_files.txt

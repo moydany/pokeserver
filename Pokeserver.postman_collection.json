@@ -1,0 +1,330 @@
+{
+	"info": {
+	  "_postman_id": "8b6d1d7a-4e6d-4a1b-a9aa-7f0d844c37fe",
+	  "name": "Pokeserver",
+	  "description": "Collection of API endpoints for the Pokeserver application.\n\n### Instructions for Using the Postman Collection\n\n1. **Import the Collection:**\n   - Open Postman.\n   - Click on the \"Import\" button and select the `.json` file.\n\n2. **Set Up Environment Variables:**\n   - Click on the \"Environments\" tab.\n   - Create a new environment called \"Pokeserver\".\n   - Add the following variables:\n     - `base_url`: `http://localhost:8080`\n     - `token`: Leave this blank initially.\n\n3. **Run the Requests:**\n   - Use the \"Sign Up User\" request to create a new user.\n   - Use the \"Login User\" request to log in with the created user's credentials. This request will automatically set the `token` variable for subsequent requests.\n   - Use the other requests to interact with the API, such as getting, saving, and deleting Pokémon.\n\n4. **Run Tests:**\n   - Each request has test scripts to validate the response. Check the \"Tests\" tab of each request for details.",
+	  "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+	  "_exporter_id": "4494437"
+	},
+	"item": [
+	  {
+		"name": "Sign Up User",
+		"request": {
+		  "method": "POST",
+		  "header": [
+			{
+			  "key": "Content-Type",
+			  "value": "application/json"
+			}
+		  ],
+		  "body": {
+			"mode": "raw",
+			"raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\",\n  \"name\": \"John\",\n  \"lastname\": \"Doe\"\n}"
+		  },
+		  "url": {
+			"raw": "{{base_url}}/api/auth/signup",
+			"host": ["{{base_url}}"],
+			"path": ["api", "auth", "signup"]
+		  }
+		},
+		"response": [],
+		"event": [
+		  {
+			"listen": "test",
+			"script": {
+			  "exec": [
+				"pm.test(\"Sign Up User - Status code is 201\", function () {",
+				"    pm.response.to.have.status(201);",
+				"});",
+				"",
+				"pm.test(\"Sign Up User - Response has user\", function () {",
+				"    var jsonData = pm.response.json();",
+				"    pm.expect(jsonData).to.have.property('user');",
+				"    pm.collectionVariables.set(\"user_id\", jsonData.user._id);",
+				"});"
+			  ],
+			  "type": "text/javascript"
+			}
+		  }
+		]
+	  },
+	  {
+		"name": "Login User",
+		"request": {
+		  "method": "POST",
+		  "header": [
+			{
+			  "key": "Content-Type",
+			  "value": "application/json"
+			}
+		  ],
+		  "body": {
+			"mode": "raw",
+			"raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\"\n}"
+		  },
+		  "url": {
+			"raw": "{{base_url}}/api/auth/login",
+			"host": ["{{base_url}}"],
+			"path": ["api", "auth", "login"]
+		  }
+		},
+		"response": [],
+		"event": [
+		  {
+			"listen": "test",
+			"script": {
+			  "exec": [
+				"pm.test(\"Login User - Status code is 200\", function () {",
+				"    pm.response.to.have.status(200);",
+				"});",
+				"",
+				"pm.test(\"Login User - Response has token\", function () {",
+				"    var jsonData = pm.response.json();",
+				"    pm.expect(jsonData).to.have.property('token');",
+				"    pm.collectionVariables.set(\"token\", jsonData.token);",
+				"});"
+			  ],
+			  "type": "text/javascript"
+			}
+		  }
+		]
+	  },
+	  {
+		"name": "Get and Save Pokemon",
+		"request": {
+		  "method": "GET",
+		  "header": [
+			{
+			  "key": "Content-Type",
+			  "value": "application/json"
+			},
+			{
+			  "key": "Authorization",
+			  "value": "Bearer {{token}}"
+			}
+		  ],
+		  "url": {
+			"raw": "{{base_url}}/api/pokemon/{{name}}",
+			"host": ["{{base_url}}"],
+			"path": ["api", "pokemon", "{{name}}"],
+			"variable": [
+			  {
+				"key": "name",
+				"value": "pikachu"
+			  }
+			]
+		  }
+		},
+		"response": [],
+		"event": [
+		  {
+			"listen": "test",
+			"script": {
+			  "exec": [
+				"pm.test(\"Get and Save Pokemon - Status code is 201\", function () {",
+				"    pm.response.to.have.status(201);",
+				"});",
+				"",
+				"pm.test(\"Get and Save Pokemon - Response has pokemon data\", function () {",
+				"    var jsonData = pm.response.json();",
+				"    pm.expect(jsonData).to.have.property('name');",
+				"    pm.expect(jsonData.name).to.equal(pm.variables.get(\"name\"));",
+				"});"
+			  ],
+			  "type": "text/javascript"
+			}
+		  }
+		]
+	  },
+	  {
+		"name": "Delete Pokemon by ID",
+		"request": {
+		  "method": "DELETE",
+		  "header": [
+			{
+			  "key": "Content-Type",
+			  "value": "application/json"
+			},
+			{
+			  "key": "Authorization",
+			  "value": "Bearer {{token}}"
+			}
+		  ],
+		  "url": {
+			"raw": "{{base_url}}/api/pokemon/id/{{id}}",
+			"host": ["{{base_url}}"],
+			"path": ["api", "pokemon", "id", "{{id}}"],
+			"variable": [
+			  {
+				"key": "id",
+				"value": "1"
+			  }
+			]
+		  }
+		},
+		"response": [],
+		"event": [
+		  {
+			"listen": "test",
+			"script": {
+			  "exec": [
+				"pm.test(\"Delete Pokemon by ID - Status code is 204\", function () {",
+				"    pm.response.to.have.status(204);",
+				"});"
+			  ],
+			  "type": "text/javascript"
+			}
+		  }
+		]
+	  },
+	  {
+		"name": "Delete Pokemon by Name",
+		"request": {
+		  "method": "DELETE",
+		  "header": [
+			{
+			  "key": "Content-Type",
+			  "value": "application/json"
+			},
+			{
+			  "key": "Authorization",
+			  "value": "Bearer {{token}}"
+			}
+		  ],
+		  "url": {
+			"raw": "{{base_url}}/api/pokemon/name/{{name}}",
+			"host": ["{{base_url}}"],
+			"path": ["api", "pokemon", "name", "{{name}}"],
+			"variable": [
+			  {
+				"key": "name",
+				"value": "pikachu"
+			  }
+			]
+		  }
+		},
+		"response": [],
+		"event": [
+		  {
+			"listen": "test",
+			"script": {
+			  "exec": [
+				"pm.test(\"Delete Pokemon by Name - Status code is 204\", function () {",
+				"    pm.response.to.have.status(204);",
+				"});"
+			  ],
+			  "type": "text/javascript"
+			}
+		  }
+		]
+	  },
+	  {
+		"name": "List Pokemons",
+		"request": {
+		  "method": "GET",
+		  "header": [
+			{
+			  "key": "Content-Type",
+			  "value": "application/json"
+			},
+			{
+			  "key": "Authorization",
+			  "value": "Bearer {{token}}"
+			}
+		  ],
+		  "url": {
+			"raw": "{{base_url}}/api/pokemon",
+			"host": ["{{base_url}}"],
+			"path": ["api", "pokemon"]
+		  }
+		},
+		"response": [],
+		"event": [
+		  {
+			"listen": "test",
+			"script": {
+			  "exec": [
+				"pm.test(\"List Pokemons - Status code is 200\", function () {",
+				"    pm.response.to.have.status(200);",
+				"});",
+				"",
+				"pm.test(\"List Pokemons - Response is an array\", function () {",
+				"    var jsonData = pm.response.json();",
+				"    pm.expect(jsonData).to.be.an('array');",
+				"});"
+			  ],
+			  "type": "text/javascript"
+			}
+		  }
+		]
+	  },
+	  {
+		"name": "Delete Pokemons by Type",
+		"request": {
+		  "method": "DELETE",
+		  "header": [
+			{
+			  "key": "Content-Type",
+			  "value": "application/json"
+			},
+			{
+			  "key": "Authorization",
+			  "value": "Bearer {{token}}"
+			}
+		  ],
+		  "url": {
+			"raw": "{{base_url}}/api/pokemon/type/{{type}}",
+			"host": ["{{base_url}}"],
+			"path": ["api", "pokemon", "type", "{{type}}"],
+			"variable": [
+			  {
+				"key": "type",
+				"value": "grass"
+			  }
+			]
+		  }
+		},
+		"response": [],
+		"event": [
+		  {
+			"listen": "test",
+			"script": {
+			  "exec": [
+				"pm.test(\"Delete Pokemons by Type - Status code is 204\", function () {",
+				"    pm.response.to.have.status(204);",
+				"});"
+			  ],
+			  "type": "text/javascript"
+			}
+		  }
+		]
+	  }
+	],
+	"event": [
+	  {
+		"listen": "prerequest",
+		"script": {
+		  "exec": [
+			"if (pm.collectionVariables.get(\"token\")) {",
+			"    pm.request.headers.add({",
+			"        key: 'Authorization',",
+			"        value: 'Bearer ' + pm.collectionVariables.get(\"token\")",
+			"    });",
+			"}"
+		  ],
+		  "type": "text/javascript"
+		}
+	  }
+	],
+	"variable": [
+	  {
+		"key": "base_url",
+		"value": "http://localhost:8080"
+	  },
+	  {
+		"key": "token",
+		"value": ""
+	  }
+	]
+  }
+  
