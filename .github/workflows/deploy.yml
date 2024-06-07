@@ -44,15 +44,10 @@ jobs:
         LIGHTSAIL_SSH_USER: ${{ secrets.LIGHTSAIL_SSH_USER }}
         LIGHTSAIL_IP: ${{ secrets.LIGHTSAIL_IP }}
       run: |
-        ssh -o StrictHostKeyChecking=no $LIGHTSAIL_SSH_USER@$LIGHTSAIL_IP << 'EOF'
-        echo "MONGO_URI=${MONGO_URI}"
-        if [ -z "${MONGO_URI}" ]; then
-          echo "MONGO_URI is empty"
-          exit 1
-        fi
+        ssh -o StrictHostKeyChecking=no ${{ secrets.LIGHTSAIL_SSH_USER }}@${{ secrets.LIGHTSAIL_IP }} << EOF
         cd /home/ubuntu/pokeserver || git clone https://github.com/moydany/pokeserver.git /home/ubuntu/pokeserver && cd /home/ubuntu/pokeserver
         git pull origin develop || exit 1
-        echo "MONGO_URI=${MONGO_URI}" > .env
+        echo "MONGO_URI=${{ secrets.MONGO_URI }}" > .env
         cat .env
         npm install
         npm run build
