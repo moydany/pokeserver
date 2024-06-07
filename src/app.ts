@@ -11,7 +11,7 @@ const envFile = `.env.${process.env.NODE_ENV || 'development'}`;
 dotenv.config({ path: envFile });
 
 const app = express();
-const port = process.env.PORT || 8080;
+const port = parseInt(process.env.PORT as string) || 8080;
 
 app.use(express.json());
 
@@ -26,7 +26,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/pokemon', pokemonRoutes);
 app.use('/', healthRoutes);
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
   console.log(`Server is running on port ${port}`);
 });
 
