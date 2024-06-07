@@ -1,32 +1,13 @@
 version: '3.8'
 services:
-  mongo:
-    image: mongo
-    container_name: mongo
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo-data:/data/db
-    networks:
-      - pokeserver-network
-
   app:
     build: .
     container_name: pokeserver
     ports:
       - "8080:8080"
-    depends_on:
-      - mongo
-    volumes:
-      - .:/app
-    networks:
-      - pokeserver-network
     environment:
       - MONGO_URI=${MONGO_URI}
       - NODE_ENV=production
-
-volumes:
-  mongo-data:
-
-networks:
-  pokeserver-network:
+    volumes:
+      - .:/app
+    command: npm run start
