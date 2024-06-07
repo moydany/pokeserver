@@ -45,6 +45,7 @@ jobs:
         LIGHTSAIL_IP: ${{ secrets.LIGHTSAIL_IP }}
       run: |
         ssh -o StrictHostKeyChecking=no $LIGHTSAIL_SSH_USER@$LIGHTSAIL_IP << 'EOF'
+        export MONGO_URI=${MONGO_URI}
         cd /home/ubuntu/pokeserver || git clone https://github.com/moydany/pokeserver.git /home/ubuntu/pokeserver && cd /home/ubuntu/pokeserver
         git pull origin develop || exit 1
         echo "MONGO_URI=$MONGO_URI" > .env
