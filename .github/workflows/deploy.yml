@@ -10,6 +10,12 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    services:
+      mongodb:
+        image: mongo
+        ports:
+          - 27017:27017
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -24,7 +30,7 @@ jobs:
 
     - name: Run tests
       env:
-        MONGO_URI: mongodb://localhost:27017/pokeDB
+        MONGO_URI: mongodb://localhost:27017/testDB
       run: npm test
 
     - name: Add SSH key
